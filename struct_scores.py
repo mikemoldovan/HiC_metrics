@@ -45,11 +45,6 @@ def main(in_cooler_file,
 
 # Plot initial maps
 
-	if hic_mat.shape[0] > 10000:
-		print("Slishkom bolshaya matrica, bratishka, mne zhe SVD schitat', govno zhrat'")
-	elif hic_mat.shape[0] > 5000:
-		print("Bolshaya matrica, bratishka, pridetsa podozhdat")
-
 	print("Removing NaNs")
 	hic_mat = remove_na(hic_mat)
 
