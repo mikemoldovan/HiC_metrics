@@ -9,8 +9,17 @@ def direct_index(hic_mat, window_size=100):
 	mat_dim = hic_mat.shape[0]
 	direct_ind_arr = [np.nan for i in range(mat_dim)]
 	diag = hic_mat.diagonal(0)
-	for i in range(window_size, mat_dim - window_size):
-		direct_ind_arr[i] = 2*diag[i] - np.sum(hic_mat[i,i-window_size:i+window_size])
+	for i in range(window_size + 1, mat_dim - window_size -1):
+		upstr = float(np.sum(hic_mat[i,i+1:i+window_size + 1]))
+		downstr = float(np.sum(hic_mat[i, i-window_size:i]))
+		expected = (upstr + downstr)/2
+		if expected == 0 or (downstr - upstr) == 0:
+			direct_ind_arr[i] = np.nan
+			continue
+		sqdiv_up = (upstr - expected)*(upstr - expected)/expected
+		sqdiv_down = (downstr - expected)*(downstr - expected)/expected
+		DI = ((downstr - upstr)/(np.abs(downstr - upstr)))*(sqdiv_up + sqdiv_down)
+		direct_ind_arr[i] = DI
 	return direct_ind_arr
 
 def contrast_index(hic_mat, ci_window_size = 10):
